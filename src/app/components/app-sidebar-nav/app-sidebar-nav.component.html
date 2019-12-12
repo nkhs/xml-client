@@ -1,0 +1,27 @@
+<nav class="sidebar-nav">
+  <ul class="nav">
+
+
+
+    <li class='nav-item'>
+      <a class="nav-link" routerLinkActive="active" routerLink="/dashboard">
+        <i class="icon-chart"></i>
+        Dashboard
+      </a>
+    </li>
+
+    <li class='nav-item' *ngIf="isAdmin">
+      <a class="nav-link" routerLinkActive="active" routerLink="/account-list">
+        <i class="icon-chart"></i>
+        Account List
+      </a>
+    </li>
+
+    <li class='nav-item' style="cursor: pointer;" (click)="logout()">
+      <a class="nav-link">
+        <i class="icon-logout"></i>
+        Logout
+      </a>
+    </li>
+  </ul>
+</nav>

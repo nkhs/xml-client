@@ -1,0 +1,12 @@
+.monitor-zoom-button-group {
+  margin-top: -25px;
+  margin-bottom: -3px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-size: 23px;
+  .zoom-button {
+    cursor: pointer;
+  }
+}

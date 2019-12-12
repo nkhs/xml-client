@@ -1,0 +1,396 @@
+<div class="data-page clearfix">
+    <div class="data-list-container col-12">
+        <div class="row">
+            <div class="">
+                <button class="btn btn-success" (click)="addModal.show()">New Ad</button>
+                <input [(ngModel)]="searchName" placeholder="search" (change)="AdFilter()">
+            </div>
+            <div class="header col-12" style="margin-top: 20px;">
+                <div class="header-content row">
+
+                    <div class="column-no">
+                        No
+                    </div>
+                    <div class="column-image">
+                        Ad Image
+                    </div>
+                    <div class="column-name" (click)="onTapSortName()">
+                        Ad Name
+                        <img *ngIf="sortUpName" src="assets/img/sort-up.png" class="sort">
+                        <img *ngIf="!sortUpName" src="assets/img/sort-down.png" class="sort">
+                    </div>
+                    <div class="column-type">
+                        Ad Type
+                        <!-- <img *ngIf="sortUpActivate" src="assets/img/sort-up.png" class="sort">
+                        <img *ngIf="!sortUpActivate" src="assets/img/sort-down.png" class="sort"> -->
+                    </div>
+                    <div class="column-scheduleType">
+                        Schedule Type
+                        <!-- <img *ngIf="sortUpActivate" src="assets/img/sort-up.png" class="sort">
+                        <img *ngIf="!sortUpActivate" src="assets/img/sort-down.png" class="sort"> -->
+                    </div>
+
+                    <div class="column-activate" (click)="onTapSortActivate()">
+                        Activate
+                        <img *ngIf="sortUpActivate" src="assets/img/sort-up.png" class="sort">
+                        <img *ngIf="!sortUpActivate" src="assets/img/sort-down.png" class="sort">
+                    </div>
+                    <div class="column-edit text-right" style="padding-right: 14px;">
+                        Edit / Delete
+                    </div>
+
+                </div>
+            </div>
+            <div class="content col-12">
+                <div class="c-row" *ngFor="let item of DataForDisplay;let index = index" (click)="showDetail(item)">
+                    <!-- ./row For Date -->
+                    <div class="c-row-content detail row">
+                        <div class="column-no">{{index + 1}}</div>
+                        <div class="column-image">
+                            <img src="{{item.image}}" class="img img-fluid img-thumbnail ad-thumb"
+                                onerror="this.src='assets/img/ad_thumb.png';">
+
+                        </div>
+                        <div class="column-name">{{item.name}}</div>
+                        <div class="column-type">{{item.type}}</div>
+                        <div class="column-scheduleType">{{item.scheduleType}}</div>
+
+                        <div class="column-activate text-center">
+                            <input class="form-check-input1 chk-layer" type="checkbox" disabled [checked]="item.enable">
+                        </div>
+
+
+                        <div class="column-edit text-right" style="padding-right: 10px;">
+                            <button class="btn btn-success btn-sm btn-edit"
+                                (click)="editDataset($event, item)">Edit</button>
+                            <button class="btn btn-danger btn-sm btn-edit"
+                                (click)="deleteDataset($event, item)">Delete</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- ./row For Dataset -->
+                </div>
+                <!-- ./ngFor DataForDisplay -->
+
+                <div class="text-center">
+                    <i class="fa fa-spinner busySplash mt-150 large" *ngIf="busy"></i>
+                </div>
+
+                <div class="c-row day-start more-btn-row clearfix">
+                    <div class="col-12 text-center">
+                        <div class="no-data" *ngIf="noData">{{message}}</div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- ./content -->
+        </div>
+    </div>
+    <!-- row -->
+</div>
+
+<div bsModal #addModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-danger" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">New Ad</h4>
+                <button type="button" class="close" (click)="addModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <label for="newAdName">Ad Name</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="email" class="form-control" id="newAdName" placeholder="Ad Name"
+                            [(ngModel)]="newAdName">
+                    </div>
+                </div>
+
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label>Ad Type:</label>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" [(ngModel)]="newAdType">
+                            <option>Banner</option>
+                            <option>Rolling</option>
+                            <option>App Link</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label>Providen Name:</label>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" [(ngModel)]="newAdBank">
+                            <option>One</option>
+                            <option>Two</option>
+                            <option>Three</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label for="newDescription">Ad Link</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control" id="newDescription" placeholder="Ad Link"
+                            [(ngModel)]="newAdDescription">
+                    </div>
+                </div>
+                <ul class="nav nav-tabs mt-15" role="tablist">
+                    <li class="nav-item" (click)="selectedTab = 'upload' ">
+                        <a [class.active]="selectedTab == 'upload'" class="nav-link" data-toggle="tab" role="tab">Upload
+                            Image</a>
+                    </li>
+                    <li class="nav-item" (click)="selectedTab = 'link'">
+                        <a [class.active]="selectedTab == 'link'" class="nav-link" role="tab">Image Link</a>
+                    </li>
+                    <li class="nav-item" (click)="selectedTab = 'existing'">
+                        <a [class.active]="selectedTab == 'existing'" class="nav-link" data-toggle="tab" role="tab">From
+                            Server</a>
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show" [class.active]="selectedTab == 'upload'" role="tabpanel">
+                        <div class="form-group">
+                            <label for="image">Ad Image</label>
+                            <input type="file" class="form-control" id="image"
+                                (change)="newImageFileChangeEvent($event)"> </div>
+
+                    </div>
+                    <div class="tab-pane fade show" [class.active]="selectedTab == 'link'" role="tabpanel">
+                        <div class="form-group">
+                            <label for="newPassword">Ad Image</label>
+                            <input type="text" class="form-control" id="newPassword" placeholder="Image Url"
+                                [(ngModel)]="newAdImageURL">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" [class.active]="selectedTab == 'existing'" role="tabpanel">
+
+                        <div class="row image-grid">
+                            <div class="col-3" *ngFor="let item of imageList;" (click)="newAdImageURL = item; newAdImageFile = null;">
+                                <img class="img" src="{{item}}" [class.selected]="newAdImageURL == item"
+                                    onerror="this.src='assets/img/ad_thumb.png';">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="mt-15">
+                    <img src="{{newAdImageURL}}" class="image-preview" onerror="this.src='assets/img/ad_thumb.png';">
+                </div>
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label>Schedule type:</label>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" [(ngModel)]="newAdScheduleType">
+                            <option>Monthly</option>
+                            <option>Weekly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label for="newAdSchedule">Schedule</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="email" class="form-control" id="newAdSchedule" placeholder="Schedule"
+                            [(ngModel)]="newAdSchedule">
+                    </div>
+                </div>
+
+                <div class="form-check mt-15">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" style="margin-left: 0;"
+                        [checked]="newAdEnabled"  (change)="newAdEnabled = !newAdEnabled">
+                    <label class="form-check-label" for="defaultCheck1">
+                        Activate
+                    </label>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="">{{newAdMessage}}</div>
+                <i class="fa fa-spinner busySplash" *ngIf="isNewUserBusy"></i>
+                <button type="button" class="btn btn-secondary" (click)="addModal.hide()">Close</button>
+                <button type="button" class="btn btn-danger" (click)="confirmNewAd(); ">Confirm</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-danger" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Ad</h4>
+                <button type="button" class="close" (click)="editModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <label for="editAdName">Ad Name</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="email" class="form-control" id="editAdName" placeholder="Ad Name"
+                            [(ngModel)]="editAdName">
+                    </div>
+                </div>
+
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label>Ad Type:</label>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" [(ngModel)]="editAdType">
+                            <option>Banner</option>
+                            <option>Rolling</option>
+                            <option>App Link</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label>Providen Name:</label>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" [(ngModel)]="editAdBank">
+                            <option>One</option>
+                            <option>Two</option>
+                            <option>Three</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label for="editAdLink">Ad Link</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control" id="editAdLink" placeholder="Ad Link"
+                            [(ngModel)]="editAdLink">
+                    </div>
+                </div>
+                <ul class="nav nav-tabs mt-15" role="tablist">
+                    <li class="nav-item" (click)="selectedTab = 'upload' ">
+                        <a [class.active]="selectedTab == 'upload'" class="nav-link" data-toggle="tab" role="tab">Upload
+                            Image</a>
+                    </li>
+                    <li class="nav-item" (click)="selectedTab = 'link'">
+                        <a [class.active]="selectedTab == 'link'" class="nav-link" role="tab">Image Link</a>
+                    </li>
+                    <li class="nav-item" (click)="selectedTab = 'existing'">
+                        <a [class.active]="selectedTab == 'existing'" class="nav-link" data-toggle="tab" role="tab">From
+                            Server</a>
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show" [class.active]="selectedTab == 'upload'" role="tabpanel">
+                        <div class="form-group">
+                            <label for="image">Ad Image</label>
+                            <input type="file" class="form-control" id="image"
+                                (change)="editImageFileChangeEvent($event)">
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade show" [class.active]="selectedTab == 'link'" role="tabpanel">
+                        <div class="form-group">
+                            <label for="newPassword">Ad Image</label>
+                            <input type="text" class="form-control" id="newPassword" placeholder="Image Url"
+                                [(ngModel)]="editAdImageURL">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" [class.active]="selectedTab == 'existing'" role="tabpanel">
+                        <div class="row image-grid">
+                            <div class="col-3" *ngFor="let item of imageList;" (click)="editAdImageURL = item; editAdImageFile = null;">
+                                <img class="img" src="{{item}}" [class.selected]="editAdImageURL == item"
+                                    onerror="this.src='assets/img/ad_thumb.png';">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-15">
+                    <img src="{{editAdImageURL}}" class="image-preview" onerror="this.src='assets/img/ad_thumb.png';">
+                </div>
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label>Schedule type:</label>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" [(ngModel)]="editAdScheduleType">
+                            <option>Monthly</option>
+                            <option>Weekly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-15">
+                    <div class="col-4">
+                        <label for="newAdSchedule">Schedule</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="email" class="form-control" id="newAdSchedule" placeholder="Schedule"
+                            [(ngModel)]="editAdSchedule">
+                    </div>
+                </div>
+
+                <div class="form-check mt-15">
+                    <input class="form-check-input" type="checkbox" id="defaultCheck2" style="margin-left: 0;"
+                        [checked]="editAdEnabled" (change)="editAdEnabled = !editAdEnabled"> 
+                    <label class="form-check-label" for="defaultCheck2">
+                        Activate
+                    </label>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="">{{editAdMessage}}</div>
+                <i class="fa fa-spinner busySplash" *ngIf="isEditUserBusy"></i>
+                <button type="button" class="btn btn-secondary" (click)="editModal.hide()">Close</button>
+                <button type="button" class="btn btn-danger" (click)="confirmEditAd(); ">Confirm</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div bsModal #rejectModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-danger" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Please Confirm</h4>
+                <button type="button" class="close" (click)="rejectModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to delete this Ad?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="rejectModal.hide()">Close</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="confirmDelete(); rejectModal.hide()">Confirm</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

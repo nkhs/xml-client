@@ -1,0 +1,149 @@
+<div class="data-page clearfix">
+  <div class="data-list-container col-12">
+    <div class="row">
+      <div class="">
+        <button class="btn btn-success" (click)="addModal.show()">New User</button>
+        <input [(ngModel)]="searchUser" placeholder="search" (change)="tapDateFilter()">
+      </div>
+      <div class="header col-12" style="margin-top: 20px;">
+        <div class="header-content row">
+
+          <div class="col-sm-1">
+            No
+            <!-- <img *ngIf="sortUpUser" src="assets/img/sort-up.png" class="sort">
+            <img *ngIf="!sortUpUser" src="assets/img/sort-down.png" class="sort"> -->
+          </div>
+          <div class="col-sm-8" (click)="onTapSortUser()">
+            Email
+            <img *ngIf="sortUpUser" src="assets/img/sort-up.png" class="sort">
+            <img *ngIf="!sortUpUser" src="assets/img/sort-down.png" class="sort">
+          </div>
+
+          <div class="col-sm-3 text-right" style="padding-right: 40px;">
+            Edit / Delete
+          </div>
+
+        </div>
+      </div>
+      <div class="content col-12">
+        <div class="c-row" *ngFor="let item of DataForDisplay;let index = index" (click)="showDetail(item)">
+          <!-- ./row For Date -->
+          <div class="c-row-content detail row">
+            <div class="col-sm-1" style="overflow: hidden;text-overflow: ellipsis">{{index + 1}}</div>
+            <div class="col-sm-8" style="overflow: hidden;text-overflow: ellipsis">{{item.email}}</div>
+            <div class="col-sm-3 text-right">
+              <button class="btn btn-success btn-sm btn-edit" (click)="editDataset($event, item)">Edit</button>
+              <button class="btn btn-danger btn-sm btn-edit" (click)="deleteDataset($event, item)">Delete</button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <!-- ./row For Dataset -->
+        </div>
+        <!-- ./ngFor DataForDisplay -->
+
+        <div class="text-center">
+          <i class="fa fa-spinner busySplash mt-150 large" *ngIf="busy"></i>
+        </div>
+
+        <div class="c-row day-start more-btn-row clearfix">
+          <div class="col-12 text-center">
+            <div class="no-data" *ngIf="noData">{{message}}</div>
+          </div>
+        </div>
+
+      </div>
+      <!-- ./content -->
+    </div>
+  </div>
+  <!-- row -->
+</div>
+
+<div bsModal #addModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">New User</h4>
+        <button type="button" class="close" (click)="addModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="newEmail">Email address</label>
+          <input type="email" class="form-control" id="newEmail" placeholder="Enter email" [(ngModel)]="newUserEmail">
+        </div>
+        <div class="form-group">
+          <label for="newPassword">Password</label>
+          <input type="text" class="form-control" id="newPassword" placeholder="Password" [(ngModel)]="newUserPassword">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="">{{newUserMessage}}</div>
+        <i class="fa fa-spinner busySplash" *ngIf="isNewUserBusy"></i>
+        <button type="button" class="btn btn-secondary" (click)="addModal.hide()">Close</button>
+        <button type="button" class="btn btn-danger" (click)="confirmNewUser(); ">Confirm</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-danger" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Edit User</h4>
+          <button type="button" class="close" (click)="editModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editEmail">Email address</label>
+            <input type="email" class="form-control" id="editEmail" placeholder="Enter email" [(ngModel)]="editUserEmail">
+          </div>
+          <div class="form-group">
+            <label for="editPassword">Password</label>
+            <input type="text" class="form-control" id="editPassword" placeholder="Password" [(ngModel)]="editUserPassword">
+          </div>
+  
+        </div>
+        <div class="modal-footer">
+          <div class="">{{editUserMessage}}</div>
+          <i class="fa fa-spinner busySplash" *ngIf="isEditUserBusy"></i>
+          <button type="button" class="btn btn-secondary" (click)="editModal.hide()">Close</button>
+          <button type="button" class="btn btn-danger" (click)="confirmEditUser(); ">Update</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+<div bsModal #rejectModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Please Confirm</h4>
+        <button type="button" class="close" (click)="rejectModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure to delete this account?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="rejectModal.hide()">Close</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete(); rejectModal.hide()">Confirm</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -19,14 +19,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('rejectModal') deleteModal;
   @ViewChild('editModal') editModal;
   @ViewChild('addModal') addModal;
-
+  adProviderList = ['Remit2India', 'RemitMoney', 'InstaReM', 'currencyfair', 'Ria Money Transfer', 'ICICI Money2India', 'Indus Fast Remit', 'MoneyDart', 'Pangea', 'Placid Express', 'Remitly', 'Transferwise', 'Venstar Exchange', 'Western Union', 'WorldRemit', 'XOOM', 'InstaRem', 'Kotak Click2Remit', 'Punjab National Bank', 'CitiBank', 'HDFC Quick Remit', 'Remitr']
   patientsName: Array<string>;
   Data: Array<any> = [];
   DataForDisplay: Array<any> = [];
-  imageList = ['assets/img/ad_thumb.png', 'assets/img/ad_thumb.png',
-    'assets/img/ad_thumb.png', 'assets/img/ad_thumb.png',
-    'assets/img/ad_thumb.png', 'assets/img/ad_thumb.png',
-    'assets/img/ad_thumb.png', 'assets/img/ad_thumb.png',]
+  imageList = []
 
   busy = false;
   sortUpActivate = false;
@@ -55,7 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public meta: Meta,
     public title: Title) {
 
-    title.setTitle('XML Edit - Dashboard');
+    title.setTitle('CADS admin panel - Dashboard');
 
   }
   ngOnInit(): void {
@@ -259,7 +256,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   newAdImageURL = '';
   newAdEnabled = true;
   newAdType = 'Banner';
-  newAdBank = '';
+  newAdBank = 'Remit2India';
   newAdScheduleType = 'Monthly';
   newAdSchedule = '';
 
@@ -285,7 +282,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   _addNewAd() {
 
-    if (this.newAdImageURL.length == 0) {
+    if (this.newAdType != 'App Link' && this.newAdImageURL.length == 0) {
       this.newAdMessage = 'Please Input image';
       this.isNewUserBusy = false;
       return;
@@ -337,11 +334,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   confirmNewAd() {
     if (this.newAdName.length == 0) {
       this.newAdMessage = 'Please Input Ad Name';
-      this.isNewUserBusy = false;
       return;
     }
 
-    if (this.newAdImageFile != null) {
+    if (this.newScheduleError.length > 0) {
+      this.newAdMessage = 'Please Input valid schdule';
+      return;
+    }
+
+    if (this.newAdType != 'App Link' && this.newAdImageFile != null) {
       this.uploadImage();
     } else {
       this._addNewAd();
@@ -359,7 +360,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   editAdEnabled = true;
   isEditUserBusy = false;
   editAdType = '';
-  editAdBank = '';
+  editAdBank = 'Remit2India';
   editAdImageFile: any;
 
   editImageFileChangeEvent(fileInput: any) {
@@ -381,7 +382,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.isEditUserBusy = true;
     this.editAdMessage = 'Uploading Image ...';
-    this.adService.upload(this.editAdImageFile,  this.userId)
+    this.adService.upload(this.editAdImageFile, this.userId)
       .then(res => {
         console.log(res);
         this.isEditUserBusy = false;
@@ -396,7 +397,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   _addEditAd() {
 
-    if (this.editAdImageURL.length == 0) {
+    if (this.editAdType != 'App Link' && this.editAdImageURL.length == 0) {
       this.editAdMessage = 'Please Input Image';
       return;
     }
@@ -435,8 +436,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.editAdMessage = 'Please Input Ad Name';
       return;
     }
-
-    if (this.editAdImageFile != null) {
+    if (this.editScheduleError.length > 0) {
+      this.editAdMessage = 'Please Input valid schdule';
+      return;
+    }
+    if (this.editAdType != 'App Link' && this.editAdImageFile != null) {
       this.uploadEditImage();
     } else {
       this._addEditAd();
@@ -444,4 +448,54 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   selectedTab = 'upload';
+  newScheduleError = '';
+
+  static checkValid_31(schedule) {
+    var numberStringList = schedule.split(/[\-,]+/)
+
+    for (var i = 0; i < numberStringList.length; i++) {
+      if (numberStringList[i].length == 0) return;
+      try { if (parseInt(numberStringList[i]) > 31) return false; } catch (e) { }
+    }
+    return true;
+  }
+  
+  static _checkValid(type, text) {
+    if (type == 'Monthly') {
+      var r = /^[0-9, \-]*$/gi
+      var error = r.test(text)
+      if (!error) {
+        return false;
+      } else {
+        if (!this.checkValid_31(text)) return false;
+        return true
+      }
+    }
+
+    if (type == 'Weekly') {
+      var r = /^(?!\s*$)(?:sun|mon|tue|wed|thu|fri|sat|sunday|monday|tuesday|wednesday|thursday|friday|saturday| |\-|,)+$/gi
+      var error = r.test(text)
+      if (!error) {
+        return false;
+      } else {
+        return true
+      }
+    }
+  }
+
+  onChangeNewAdSchedule() {
+    if (DashboardComponent._checkValid(this.newAdScheduleType, this.newAdSchedule)) {
+      this.newScheduleError = ''
+    } else {
+      this.newScheduleError = 'Invalid Schedule Format'
+    }
+  }
+  editScheduleError = ''
+  onChangeEditAdSchedule() {
+    if (DashboardComponent._checkValid(this.editAdScheduleType, this.editAdSchedule)) {
+      this.editScheduleError = ''
+    } else {
+      this.editScheduleError = 'Invalid Schedule Format'
+    }
+  }
 }

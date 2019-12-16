@@ -42,7 +42,7 @@ export class AccountListComponent implements OnInit, OnDestroy {
     public meta: Meta,
     public title: Title) {
 
-    title.setTitle('XML Edit - Account List');
+    title.setTitle('CADS admin panel - Account List');
 
   }
   ngOnInit(): void {

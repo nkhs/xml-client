@@ -23,15 +23,7 @@ export class LoginComponent implements OnInit {
     public meta: Meta,
     public title: Title
   ) {
-    title.setTitle('XML Edit - Login Page');
-    meta.addTags([
-      { name: 'author', content: 'XML' },
-      {
-        name: 'keywords', content: 'Login Page, XML, Angular 2, angular 4,' +
-          ' login, sign in, reset password, password, email, recovery account, XML-web'
-      },
-      { name: 'description', content: 'Login Page' }
-    ]);
+    title.setTitle('CADS admin panel - Login Page');
     this.user = new User();
   }
   isBusy = false;

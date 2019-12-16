@@ -78,13 +78,16 @@
     }
   }
   .column-name {
-    width: calc(100% - 606px);
+    width: calc(100% - 766px);
     // text-align: center;
   }
   .column-type {
     width: 90px;
   }
   .column-scheduleType {
+    width: 160px;
+  }
+  .column-schedule {
     width: 160px;
   }
   .column-activate {
@@ -284,4 +287,7 @@
   width: 50%;
   margin: auto;
   display: block;
+}
+.error {
+  color: red;
 }

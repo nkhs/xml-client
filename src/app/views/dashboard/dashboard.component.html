@@ -26,8 +26,9 @@
                     </div>
                     <div class="column-scheduleType">
                         Schedule Type
-                        <!-- <img *ngIf="sortUpActivate" src="assets/img/sort-up.png" class="sort">
-                        <img *ngIf="!sortUpActivate" src="assets/img/sort-down.png" class="sort"> -->
+                    </div>
+                    <div class="column-schedule">
+                        Schedule
                     </div>
 
                     <div class="column-activate" (click)="onTapSortActivate()">
@@ -54,6 +55,7 @@
                         <div class="column-name">{{item.name}}</div>
                         <div class="column-type">{{item.type}}</div>
                         <div class="column-scheduleType">{{item.scheduleType}}</div>
+                        <div class="column-schedule">{{item.schedule}}</div>
 
                         <div class="column-activate text-center">
                             <input class="form-check-input1 chk-layer" type="checkbox" disabled [checked]="item.enable">
@@ -123,13 +125,11 @@
                 </div>
                 <div class="row mt-15">
                     <div class="col-4">
-                        <label>Providen Name:</label>
+                        <label>Provider Name:</label>
                     </div>
                     <div class="col-8">
                         <select class="form-control" [(ngModel)]="newAdBank">
-                            <option>One</option>
-                            <option>Two</option>
-                            <option>Three</option>
+                            <option *ngFor="let item of adProviderList">{{item}}</option>
                         </select>
                     </div>
                 </div>
@@ -143,56 +143,63 @@
                             [(ngModel)]="newAdDescription">
                     </div>
                 </div>
-                <ul class="nav nav-tabs mt-15" role="tablist">
-                    <li class="nav-item" (click)="selectedTab = 'upload' ">
-                        <a [class.active]="selectedTab == 'upload'" class="nav-link" data-toggle="tab" role="tab">Upload
-                            Image</a>
-                    </li>
-                    <li class="nav-item" (click)="selectedTab = 'link'">
-                        <a [class.active]="selectedTab == 'link'" class="nav-link" role="tab">Image Link</a>
-                    </li>
-                    <li class="nav-item" (click)="selectedTab = 'existing'">
-                        <a [class.active]="selectedTab == 'existing'" class="nav-link" data-toggle="tab" role="tab">From
-                            Server</a>
-                    </li>
+                <div *ngIf="newAdType!='App Link' ">
+                    <ul class="nav nav-tabs mt-15" role="tablist">
+                        <li class="nav-item" (click)="selectedTab = 'upload' ">
+                            <a [class.active]="selectedTab == 'upload'" class="nav-link" data-toggle="tab"
+                                role="tab">Upload
+                                Image</a>
+                        </li>
+                        <li class="nav-item" (click)="selectedTab = 'link'">
+                            <a [class.active]="selectedTab == 'link'" class="nav-link" role="tab">Image Link</a>
+                        </li>
+                        <li class="nav-item" (click)="selectedTab = 'existing'">
+                            <a [class.active]="selectedTab == 'existing'" class="nav-link" data-toggle="tab"
+                                role="tab">From
+                                Server</a>
+                        </li>
 
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade show" [class.active]="selectedTab == 'upload'" role="tabpanel">
-                        <div class="form-group">
-                            <label for="image">Ad Image</label>
-                            <input type="file" class="form-control" id="image"
-                                (change)="newImageFileChangeEvent($event)"> </div>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show" [class.active]="selectedTab == 'upload'" role="tabpanel">
+                            <div class="form-group">
+                                <label for="image">Ad Image</label>
+                                <input type="file" class="form-control" id="image"
+                                    (change)="newImageFileChangeEvent($event)"> </div>
 
-                    </div>
-                    <div class="tab-pane fade show" [class.active]="selectedTab == 'link'" role="tabpanel">
-                        <div class="form-group">
-                            <label for="newPassword">Ad Image</label>
-                            <input type="text" class="form-control" id="newPassword" placeholder="Image Url"
-                                [(ngModel)]="newAdImageURL">
                         </div>
-                    </div>
-                    <div class="tab-pane fade show" [class.active]="selectedTab == 'existing'" role="tabpanel">
-
-                        <div class="row image-grid">
-                            <div class="col-3" *ngFor="let item of imageList;" (click)="newAdImageURL = item; newAdImageFile = null;">
-                                <img class="img" src="{{item}}" [class.selected]="newAdImageURL == item"
-                                    onerror="this.src='assets/img/ad_thumb.png';">
+                        <div class="tab-pane fade show" [class.active]="selectedTab == 'link'" role="tabpanel">
+                            <div class="form-group">
+                                <label for="newPassword">Ad Image</label>
+                                <input type="text" class="form-control" id="newPassword" placeholder="Image Url"
+                                    [(ngModel)]="newAdImageURL">
                             </div>
                         </div>
+                        <div class="tab-pane fade show" [class.active]="selectedTab == 'existing'" role="tabpanel">
+
+                            <div class="row image-grid">
+                                <div class="col-3" *ngFor="let item of imageList;"
+                                    (click)="newAdImageURL = item; newAdImageFile = null;">
+                                    <img class="img" src="{{item}}" [class.selected]="newAdImageURL == item"
+                                        onerror="this.src='assets/img/ad_thumb.png';">
+                                </div>
+                            </div>
+
+                        </div>
 
                     </div>
+                    <div class="mt-15">
+                        <img src="{{newAdImageURL}}" class="image-preview"
+                            onerror="this.src='assets/img/ad_thumb.png';">
+                    </div>
+                </div>
 
-                </div>
-                <div class="mt-15">
-                    <img src="{{newAdImageURL}}" class="image-preview" onerror="this.src='assets/img/ad_thumb.png';">
-                </div>
                 <div class="row mt-15">
                     <div class="col-4">
                         <label>Schedule type:</label>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" [(ngModel)]="newAdScheduleType">
+                        <select class="form-control" [(ngModel)]="newAdScheduleType"  (change)="onChangeNewAdSchedule()">
                             <option>Monthly</option>
                             <option>Weekly</option>
                         </select>
@@ -203,14 +210,15 @@
                         <label for="newAdSchedule">Schedule</label>
                     </div>
                     <div class="col-8">
-                        <input type="email" class="form-control" id="newAdSchedule" placeholder="Schedule"
-                            [(ngModel)]="newAdSchedule">
+                        <input type="text" class="form-control" id="newAdSchedule" placeholder="Schedule"
+                            [(ngModel)]="newAdSchedule" (keyup)="onChangeNewAdSchedule()">
+                        <div class="error">{{newScheduleError}}</div>
                     </div>
                 </div>
 
                 <div class="form-check mt-15">
                     <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" style="margin-left: 0;"
-                        [checked]="newAdEnabled"  (change)="newAdEnabled = !newAdEnabled">
+                        [checked]="newAdEnabled" (change)="newAdEnabled = !newAdEnabled">
                     <label class="form-check-label" for="defaultCheck1">
                         Activate
                     </label>
@@ -264,18 +272,17 @@
                 </div>
                 <div class="row mt-15">
                     <div class="col-4">
-                        <label>Providen Name:</label>
+                        <label>Provider Name:</label>
                     </div>
                     <div class="col-8">
                         <select class="form-control" [(ngModel)]="editAdBank">
-                            <option>One</option>
-                            <option>Two</option>
-                            <option>Three</option>
+                            <option *ngFor="let item of adProviderList">{{item}}</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="row mt-15">
+
                     <div class="col-4">
                         <label for="editAdLink">Ad Link</label>
                     </div>
@@ -284,55 +291,61 @@
                             [(ngModel)]="editAdLink">
                     </div>
                 </div>
-                <ul class="nav nav-tabs mt-15" role="tablist">
-                    <li class="nav-item" (click)="selectedTab = 'upload' ">
-                        <a [class.active]="selectedTab == 'upload'" class="nav-link" data-toggle="tab" role="tab">Upload
-                            Image</a>
-                    </li>
-                    <li class="nav-item" (click)="selectedTab = 'link'">
-                        <a [class.active]="selectedTab == 'link'" class="nav-link" role="tab">Image Link</a>
-                    </li>
-                    <li class="nav-item" (click)="selectedTab = 'existing'">
-                        <a [class.active]="selectedTab == 'existing'" class="nav-link" data-toggle="tab" role="tab">From
-                            Server</a>
-                    </li>
+                <div *ngIf="editAdType!='App Link' ">
+                    <ul class="nav nav-tabs mt-15" role="tablist">
+                        <li class="nav-item" (click)="selectedTab = 'upload' ">
+                            <a [class.active]="selectedTab == 'upload'" class="nav-link" data-toggle="tab"
+                                role="tab">Upload
+                                Image</a>
+                        </li>
+                        <li class="nav-item" (click)="selectedTab = 'link'">
+                            <a [class.active]="selectedTab == 'link'" class="nav-link" role="tab">Image Link</a>
+                        </li>
+                        <li class="nav-item" (click)="selectedTab = 'existing'">
+                            <a [class.active]="selectedTab == 'existing'" class="nav-link" data-toggle="tab"
+                                role="tab">From
+                                Server</a>
+                        </li>
 
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade show" [class.active]="selectedTab == 'upload'" role="tabpanel">
-                        <div class="form-group">
-                            <label for="image">Ad Image</label>
-                            <input type="file" class="form-control" id="image"
-                                (change)="editImageFileChangeEvent($event)">
-                        </div>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show" [class.active]="selectedTab == 'upload'" role="tabpanel">
+                            <div class="form-group">
+                                <label for="image">Ad Image</label>
+                                <input type="file" class="form-control" id="image"
+                                    (change)="editImageFileChangeEvent($event)">
+                            </div>
 
-                    </div>
-                    <div class="tab-pane fade show" [class.active]="selectedTab == 'link'" role="tabpanel">
-                        <div class="form-group">
-                            <label for="newPassword">Ad Image</label>
-                            <input type="text" class="form-control" id="newPassword" placeholder="Image Url"
-                                [(ngModel)]="editAdImageURL">
                         </div>
-                    </div>
-                    <div class="tab-pane fade show" [class.active]="selectedTab == 'existing'" role="tabpanel">
-                        <div class="row image-grid">
-                            <div class="col-3" *ngFor="let item of imageList;" (click)="editAdImageURL = item; editAdImageFile = null;">
-                                <img class="img" src="{{item}}" [class.selected]="editAdImageURL == item"
-                                    onerror="this.src='assets/img/ad_thumb.png';">
+                        <div class="tab-pane fade show" [class.active]="selectedTab == 'link'" role="tabpanel">
+                            <div class="form-group">
+                                <label for="newPassword">Ad Image</label>
+                                <input type="text" class="form-control" id="newPassword" placeholder="Image Url"
+                                    [(ngModel)]="editAdImageURL">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" [class.active]="selectedTab == 'existing'" role="tabpanel">
+                            <div class="row image-grid">
+                                <div class="col-3" *ngFor="let item of imageList;"
+                                    (click)="editAdImageURL = item; editAdImageFile = null;">
+                                    <img class="img" src="{{item}}" [class.selected]="editAdImageURL == item"
+                                        onerror="this.src='assets/img/ad_thumb.png';">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="mt-15">
-                    <img src="{{editAdImageURL}}" class="image-preview" onerror="this.src='assets/img/ad_thumb.png';">
+                    <div class="mt-15">
+                        <img src="{{editAdImageURL}}" class="image-preview"
+                            onerror="this.src='assets/img/ad_thumb.png';">
+                    </div>
                 </div>
                 <div class="row mt-15">
                     <div class="col-4">
                         <label>Schedule type:</label>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" [(ngModel)]="editAdScheduleType">
+                        <select class="form-control" [(ngModel)]="editAdScheduleType" (change)="onChangeEditAdSchedule()">
                             <option>Monthly</option>
                             <option>Weekly</option>
                         </select>
@@ -343,14 +356,15 @@
                         <label for="newAdSchedule">Schedule</label>
                     </div>
                     <div class="col-8">
-                        <input type="email" class="form-control" id="newAdSchedule" placeholder="Schedule"
-                            [(ngModel)]="editAdSchedule">
+                        <input type="text" class="form-control" id="newAdSchedule" placeholder="Schedule"
+                            [(ngModel)]="editAdSchedule" (keyup)="onChangeEditAdSchedule()">
+                        <div class="error">{{editScheduleError}}</div>
                     </div>
                 </div>
 
                 <div class="form-check mt-15">
                     <input class="form-check-input" type="checkbox" id="defaultCheck2" style="margin-left: 0;"
-                        [checked]="editAdEnabled" (change)="editAdEnabled = !editAdEnabled"> 
+                        [checked]="editAdEnabled" (change)="editAdEnabled = !editAdEnabled">
                     <label class="form-check-label" for="defaultCheck2">
                         Activate
                     </label>

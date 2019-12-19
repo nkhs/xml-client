@@ -117,11 +117,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   transform(data: any): any {
     const dataset = data;
 
-    if (!environment.production) {
-      if (data.image != null && !data.image.includes('http')) {
-        data.image = environment.SERVER_URL + '/' + data.image;
-      }
+    // if (!environment.production) {
+    if (data.image != null && !data.image.includes('http')) {
+      data.image = environment.SERVER_URL + '/' + data.image;
     }
+    // }
     return dataset;
   }
 
@@ -237,9 +237,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.editAdScheduleType = this.selectedAccountForEdit.scheduleType;
     this.editAdSchedule = this.selectedAccountForEdit.schedule;
     this.editAdImageURL = this.selectedAccountForEdit.image;
+    this.editAdMessage = '';
+    this.selectedTab = 'upload';
     this.editModal.show();
     $event.stopPropagation();
-    console.log(dataset);
   }
 
   confirmDelete() {
@@ -252,7 +253,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   newAdName = '';
-  newAdDescription = '';
+  newAdLink = '';
   newAdImageURL = '';
   newAdEnabled = true;
   newAdType = 'Banner';
@@ -264,6 +265,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   newAdMessage = '';
   isNewUserBusy = false;
+  newAdImageObject: any;
   newImageFileChangeEvent(fileInput: any) {
     const self = this;
 
@@ -296,19 +298,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ad.bank = this.newAdBank;
     ad.image = this.newAdImageURL;
     ad.enable = this.newAdEnabled;
-    ad.link = this.newAdDescription;
+    ad.link = this.newAdLink;
     ad.scheduleType = this.newAdScheduleType;
     ad.schedule = this.newAdSchedule;
     this.adService.addAd(ad).subscribe(res => {
       this.isNewUserBusy = false;
       if (res.success) {
         this.newAdMessage = 'Successfully added new Ad.';
+        setTimeout(() => this.addModal.hide(), 1000);
         this.getAdList();
-        this.newAdName = '';
-        this.newAdImageURL = '';
-        this.newAdSchedule = '';
-        this.newAdEnabled = true;
-
       } else {
         this.newAdMessage = res.message;
       }
@@ -322,6 +320,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.adService.upload(this.newAdImageFile, this.userId)
       .then(res => {
         console.log(res);
+
         if (res.success) {
           this.newAdImageURL = res.data;
           this._addNewAd();
@@ -331,17 +330,47 @@ export class DashboardComponent implements OnInit, OnDestroy {
         console.error(e);
       })
   }
+  onTapNewModal() {
+    this.newAdName = '';
+    this.newAdType = 'Banner';
+    this.newAdLink = ''
+
+    this.newAdImageURL = '';
+    this.newAdImageObject = '';
+
+    this.newAdScheduleType = 'Monthly';
+    this.newAdSchedule = '';
+    this.newAdEnabled = true;
+    this.newAdMessage = '';
+    this.selectedTab = 'upload'
+    this.addModal.show();
+  }
   confirmNewAd() {
     if (this.newAdName.length == 0) {
       this.newAdMessage = 'Please Input Ad Name';
       return;
     }
-
-    if (this.newScheduleError.length > 0) {
-      this.newAdMessage = 'Please Input valid schdule';
+    if (this.newAdSchedule.length == 0) {
+      this.newAdMessage = 'Please Input valid schedule';
       return;
     }
+    if (this.newScheduleError.length > 0) {
+      this.newAdMessage = 'Please Input valid schedule';
+      return;
+    }
+    this.isNewUserBusy = true;
+    this.adService.checkAdName(this.newAdName, "").subscribe(res => {
+      this.isNewUserBusy = false;
 
+      if (res.success) {
+        this.__newAD();
+      } else {
+        this.newAdMessage = res.message;
+      }
+    });
+  }
+
+  __newAD() {
     if (this.newAdType != 'App Link' && this.newAdImageFile != null) {
       this.uploadImage();
     } else {
@@ -386,16 +415,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .then(res => {
         console.log(res);
         this.isEditUserBusy = false;
+        this.editAdImageObject = '';
         if (res.success) {
           this.editAdImageURL = res.data;
-          this._addEditAd();
+          this._editAd();
         }
       })
       .catch(e => {
         console.error(e);
       })
   }
-  _addEditAd() {
+  _editAd() {
 
     if (this.editAdType != 'App Link' && this.editAdImageURL.length == 0) {
       this.editAdMessage = 'Please Input Image';
@@ -419,11 +449,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.isEditUserBusy = false;
       if (res.success) {
         this.editAdMessage = 'Successfully updated Ad.';
+        setTimeout(() => this.editModal.hide(), 1000);
         this.getAdList();
-        this.editAdName = '';
-        this.editAdImageURL = '';
-        this.editAdLink = '';
-        this.editAdEnabled = true;
+
+
       } else {
         this.editAdMessage = res.message;
       }
@@ -436,14 +465,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.editAdMessage = 'Please Input Ad Name';
       return;
     }
-    if (this.editScheduleError.length > 0) {
-      this.editAdMessage = 'Please Input valid schdule';
+    if (this.editAdSchedule.length == 0) {
+      this.editAdMessage = 'Please Input valid schedule';
       return;
     }
+    if (this.editScheduleError.length > 0) {
+      this.editAdMessage = 'Please Input valid schedule';
+      return;
+    }
+
+    this.isEditUserBusy = true;
+    this.adService.checkAdName(this.editAdName, this.selectedAccountForEdit._id).subscribe(res => {
+      this.isEditUserBusy = false;
+
+      if (res.success) {
+        this.__editAD();
+      } else {
+        this.editAdMessage = res.message;
+      }
+    });
+  }
+  editAdImageObject: any;
+  __editAD() {
     if (this.editAdType != 'App Link' && this.editAdImageFile != null) {
       this.uploadEditImage();
     } else {
-      this._addEditAd();
+      this._editAd();
     }
   }
 
@@ -454,12 +501,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     var numberStringList = schedule.split(/[\-,]+/)
 
     for (var i = 0; i < numberStringList.length; i++) {
-      if (numberStringList[i].length == 0) return;
+      if (numberStringList[i].length == 0) continue;
       try { if (parseInt(numberStringList[i]) > 31) return false; } catch (e) { }
     }
     return true;
   }
-  
+
   static _checkValid(type, text) {
     if (type == 'Monthly') {
       var r = /^[0-9, \-]*$/gi

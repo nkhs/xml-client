@@ -2,7 +2,7 @@
     <div class="data-list-container col-12">
         <div class="row">
             <div class="">
-                <button class="btn btn-success" (click)="addModal.show()">New Ad</button>
+                <button class="btn btn-success" (click)="onTapNewModal()">New Ad</button>
                 <input [(ngModel)]="searchName" placeholder="search" (change)="AdFilter()">
             </div>
             <div class="header col-12" style="margin-top: 20px;">
@@ -103,7 +103,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-4">
-                        <label for="newAdName">Ad Name</label>
+                        <label for="newAdName">Ad Name:</label>
                     </div>
                     <div class="col-8">
                         <input type="email" class="form-control" id="newAdName" placeholder="Ad Name"
@@ -136,11 +136,12 @@
 
                 <div class="row mt-15">
                     <div class="col-4">
-                        <label for="newDescription">Ad Link</label>
+                        <label for="newDescription">Ad Link:</label>
                     </div>
                     <div class="col-8">
                         <input type="text" class="form-control" id="newDescription" placeholder="Ad Link"
-                            [(ngModel)]="newAdDescription">
+                            [(ngModel)]="newAdLink">
+                        <div class="warning" *ngIf="newAdLink.length == 0">Ad Link is empty</div>
                     </div>
                 </div>
                 <div *ngIf="newAdType!='App Link' ">
@@ -165,13 +166,13 @@
                             <div class="form-group">
                                 <label for="image">Ad Image</label>
                                 <input type="file" class="form-control" id="image"
-                                    (change)="newImageFileChangeEvent($event)"> </div>
+                                    (change)="newImageFileChangeEvent($event)" [(ngModel)]="newAdImageObject"> </div>
 
                         </div>
                         <div class="tab-pane fade show" [class.active]="selectedTab == 'link'" role="tabpanel">
                             <div class="form-group">
-                                <label for="newPassword">Ad Image</label>
-                                <input type="text" class="form-control" id="newPassword" placeholder="Image Url"
+                                <label for="newImageUrl">Ad Image</label>
+                                <input type="text" class="form-control" id="newImageUrl" placeholder="Image Url"
                                     [(ngModel)]="newAdImageURL">
                             </div>
                         </div>
@@ -199,7 +200,7 @@
                         <label>Schedule type:</label>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" [(ngModel)]="newAdScheduleType"  (change)="onChangeNewAdSchedule()">
+                        <select class="form-control" [(ngModel)]="newAdScheduleType" (change)="onChangeNewAdSchedule()">
                             <option>Monthly</option>
                             <option>Weekly</option>
                         </select>
@@ -207,7 +208,7 @@
                 </div>
                 <div class="row mt-15">
                     <div class="col-4">
-                        <label for="newAdSchedule">Schedule</label>
+                        <label for="newAdSchedule">Schedule:</label>
                     </div>
                     <div class="col-8">
                         <input type="text" class="form-control" id="newAdSchedule" placeholder="Schedule"
@@ -250,11 +251,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-4">
-                        <label for="editAdName">Ad Name</label>
+                        <label for="editAdName">Ad Name:</label>
                     </div>
                     <div class="col-8">
                         <input type="email" class="form-control" id="editAdName" placeholder="Ad Name"
                             [(ngModel)]="editAdName">
+
                     </div>
                 </div>
 
@@ -284,11 +286,12 @@
                 <div class="row mt-15">
 
                     <div class="col-4">
-                        <label for="editAdLink">Ad Link</label>
+                        <label for="editAdLink">Ad Link:</label>
                     </div>
                     <div class="col-8">
                         <input type="text" class="form-control" id="editAdLink" placeholder="Ad Link"
                             [(ngModel)]="editAdLink">
+                        <div class="warning" *ngIf="editAdLink.length == 0">Ad Link is empty</div>
                     </div>
                 </div>
                 <div *ngIf="editAdType!='App Link' ">
@@ -313,7 +316,7 @@
                             <div class="form-group">
                                 <label for="image">Ad Image</label>
                                 <input type="file" class="form-control" id="image"
-                                    (change)="editImageFileChangeEvent($event)">
+                                    (change)="editImageFileChangeEvent($event)" [(ngModel)]="editAdImageObject">
                             </div>
 
                         </div>
@@ -345,7 +348,8 @@
                         <label>Schedule type:</label>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" [(ngModel)]="editAdScheduleType" (change)="onChangeEditAdSchedule()">
+                        <select class="form-control" [(ngModel)]="editAdScheduleType"
+                            (change)="onChangeEditAdSchedule()">
                             <option>Monthly</option>
                             <option>Weekly</option>
                         </select>
@@ -353,10 +357,10 @@
                 </div>
                 <div class="row mt-15">
                     <div class="col-4">
-                        <label for="newAdSchedule">Schedule</label>
+                        <label for="editAdSchedule">Schedule:</label>
                     </div>
                     <div class="col-8">
-                        <input type="text" class="form-control" id="newAdSchedule" placeholder="Schedule"
+                        <input type="text" class="form-control" id="editAdSchedule" placeholder="Schedule"
                             [(ngModel)]="editAdSchedule" (keyup)="onChangeEditAdSchedule()">
                         <div class="error">{{editScheduleError}}</div>
                     </div>

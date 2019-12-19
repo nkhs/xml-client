@@ -37,9 +37,6 @@
 /**********Content table*********/
 
 .data-list-container {
-  // width: calc(100% - 280px);
-  // padding-left: 30px;
-  // max-width: 750px;
   float: left;
   font-size: 16px;
   .header {
@@ -143,34 +140,6 @@
   }
 }
 
-.select-group {
-  border: 1px solid #c2cfd6;
-  height: 120px;
-  margin-top: 10px;
-  overflow-y: scroll;
-  .select-item {
-    line-height: 20px;
-    padding-left: 10px;
-    cursor: not-allowed;
-    &.isSelected {
-      color: red;
-    }
-  }
-  &.isUserFilter {
-    .select-item {
-      cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -o-user-select: none;
-      user-select: none;
-      &:hover {
-        font-weight: bold;
-      }
-    }
-  }
-}
-
 .busySplash.mt-150 {
   margin-top: 150px;
 }
@@ -239,27 +208,10 @@
   }
 }
 
-.bold {
-  font-weight: bold;
-}
-
-.button-del {
-  float: right;
-  width: 30px;
-  &:hover {
-    transform: scale(1.1);
-  }
-}
-
 .mt-15 {
   margin-top: 10px;
 }
-.k-calendar {
-  width: 100%;
-  max-width: 300px;
-  display: block;
-  margin: auto;
-}
+
 .image-grid {
   div {
     margin-top: 10px;
@@ -290,4 +242,8 @@
 }
 .error {
   color: red;
+}
+.warning {
+  color: #856404;
+  padding-left: 13px;
 }

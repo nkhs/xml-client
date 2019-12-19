@@ -24,6 +24,10 @@ export class AdService {
     return this.apiService.put('/ad/', ad);
   }
 
+  checkAdName(adName: string, adID: string) {
+    return this.apiService.post('/ad/ad-namecheck/', { name: adName, id: adID });
+  }
+
   updateAccount(ad: Ad) {
     return this.apiService.post('/ad/update/', ad);
   }

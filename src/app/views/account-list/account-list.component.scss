@@ -1,12 +1,12 @@
 .data-page {
-  background: #FFFFFF;
+  background: #ffffff;
   margin: 20px 50px;
   border-radius: 4px;
   padding: 20px;
   color: #000;
 }
 
-@media (max-width:767px) {
+@media (max-width: 767px) {
   .data-page {
     margin: 20px 10px;
   }
@@ -21,7 +21,7 @@
   }
 }
 
-@media (min-width:992px) {
+@media (min-width: 992px) {
   .filter-div {
     padding-right: 20px;
     border-right: 1px gray solid;
@@ -53,7 +53,7 @@
 .chk-layer {
   float: left;
   width: 30px;
-  input[type=checkbox] {
+  input[type="checkbox"] {
     /* Double-sized Checkboxes */
     -ms-transform: scale(1.5);
     /* IE */
@@ -99,7 +99,7 @@
   font-size: 16px;
   .header {
     line-height: 40px;
-    background: #494D51;
+    background: #494d51;
     color: #fff; // height: 40px;
     margin-bottom: 15px;
     padding: 0 27px 0 10px;
@@ -142,7 +142,8 @@
       &:nth-child(odd) {
         background: #eeeeee;
       }
-      &:nth-child(even) {}
+      &:nth-child(even) {
+      }
       .c-row-content {
         padding: 7px 0px;
       }
@@ -174,7 +175,7 @@
 .storage-used {
   line-height: 40px;
   margin-top: 12px;
-  background: #494D51;
+  background: #494d51;
   color: white;
 }
 
@@ -204,39 +205,10 @@ select.selectpicker {
   margin-top: 10px;
 }
 
-.select-group {
-  border: 1px solid #c2cfd6;
-  height: 120px;
-  margin-top: 10px;
-  overflow-y: scroll;
-  .select-item {
-    line-height: 20px;
-    padding-left: 10px;
-    cursor: not-allowed;
-    &.isSelected {
-      color: red;
-    }
-  }
-  &.isGatewayFilter,
-  &.isUserFilter {
-    .select-item {
-      cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -o-user-select: none;
-      user-select: none;
-      &:hover {
-        font-weight: bold;
-      }
-    }
-  }
-}
-
 .busySplash.mt-150 {
   margin-top: 150px;
 }
-.busySplash.large{
+.busySplash.large {
   font-size: 50px;
   line-height: 50px;
   height: 50px;
@@ -313,6 +285,6 @@ select.selectpicker {
   }
 }
 
-.btn-edit{
-width: 60px;
+.btn-edit {
+  width: 60px;
 }

@@ -10,6 +10,13 @@ export class Ad {
     scheduleType: string;
     schedule: string;
     owner: string;
+    order: string;
+    tagLine: string;
+    
+    position: string;
+    height: string;
+    fullwidth: boolean;
+    
     constructor() {
 
     }

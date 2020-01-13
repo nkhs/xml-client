@@ -120,6 +120,7 @@
                             <option>Banner</option>
                             <option>Rolling</option>
                             <option>App Link</option>
+                            <option>Top Bank</option>
                         </select>
                     </div>
                 </div>
@@ -144,7 +145,59 @@
                         <div class="warning" *ngIf="newAdLink.length == 0">Ad Link is empty</div>
                     </div>
                 </div>
-                <div *ngIf="newAdType!='App Link' ">
+
+                <div class="row mt-15" *ngIf="newAdType == 'App Link' ">
+                    <div class="col-4">
+                        <label for="newDescription">Display Order:</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="number" class="form-control" [(ngModel)]="newAdOrder" min="0" max="1000" step="1">
+                        <div class="warning" *ngIf="newAdOrderIsError">Dispaly Order is not unique.</div>
+                    </div>
+                </div>
+
+                <div class="row mt-15" *ngIf="newAdType == 'Top Bank' ">
+                    <div class="col-4">
+                        <label for="newDescription">Tag line:</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control" [(ngModel)]="newAdTagLine">
+                        <div class="warning" *ngIf="newAdTagLine.length == 0">Tag line is empty.</div>
+                    </div>
+                </div>
+                <div *ngIf="newAdType == 'Rolling' ">
+                    <div class="row mt-15">
+                        <div class="col-4">
+                            <label for="newDescription">Position:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="number" class="form-control" [(ngModel)]="newAdPosition">
+                        </div>
+                    </div>
+
+                    <div class="row mt-15">
+                        <div class="col-4">
+                            <label for="newDescription">Height:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="number" class="form-control" [(ngModel)]="newAdHeight">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-15" *ngIf="newAdType == 'Banner' ">
+                    <div class="col-4">
+                        <label for="defaultCheck2">
+                            Full Width:
+                        </label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-check-input" type="checkbox" id="defaultCheck2" style="margin-left: 0;"
+                            [checked]="newAdFullWidth" (change)="newAdFullWidth = !newAdFullWidth">
+                    </div>
+                </div>
+
+                <div *ngIf="newAdType!='App Link' && newAdType!='Top Bank' ">
                     <ul class="nav nav-tabs mt-15" role="tablist">
                         <li class="nav-item" (click)="selectedTab = 'upload' ">
                             <a [class.active]="selectedTab == 'upload'" class="nav-link" data-toggle="tab"
@@ -269,6 +322,7 @@
                             <option>Banner</option>
                             <option>Rolling</option>
                             <option>App Link</option>
+                            <option>Top Bank</option>
                         </select>
                     </div>
                 </div>
@@ -294,7 +348,61 @@
                         <div class="warning" *ngIf="editAdLink.length == 0">Ad Link is empty</div>
                     </div>
                 </div>
-                <div *ngIf="editAdType!='App Link' ">
+
+                <div class="row mt-15" *ngIf="editAdType == 'App Link' ">
+                    <div class="col-4">
+                        <label for="newDescription">Display Order:</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="number" class="form-control" [(ngModel)]="editAdOrder" min="0" max="1000" step="1">
+                        <div class="warning" *ngIf="editAdOrderIsError">Dispaly Order is unique.</div>
+                    </div>
+                </div>
+
+                <div class="row mt-15" *ngIf="editAdType == 'Top Bank' ">
+
+                    <div class="col-4">
+                        <label for="newDescription">Tag line:</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control" [(ngModel)]="editAdTagLine">
+                        <div class="warning" *ngIf="editAdTagLine.length == 0">Tag line is empty.</div>
+                    </div>
+                </div>
+
+                <div *ngIf="editAdType == 'Rolling' ">
+                    <div class="row mt-15">
+                        <div class="col-4">
+                            <label for="newDescription">Position:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="number" class="form-control" [(ngModel)]="editAdPosition">
+                        </div>
+                    </div>
+
+                    <div class="row mt-15">
+                        <div class="col-4">
+                            <label for="newDescription">Height:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="number" class="form-control" [(ngModel)]="editAdHeight">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-15" *ngIf="editAdType == 'Banner' ">
+                    <div class="col-4">
+                        <label for="defaultCheck2">
+                            Full Width:
+                        </label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-check-input" type="checkbox" id="defaultCheck2" style="margin-left: 0;"
+                            [checked]="editAdFullWidth" (change)="editAdFullWidth = !editAdFullWidth">
+                    </div>
+                </div>
+
+                <div *ngIf="editAdType!='App Link' && editAdType!='Top Bank' ">
                     <ul class="nav nav-tabs mt-15" role="tablist">
                         <li class="nav-item" (click)="selectedTab = 'upload' ">
                             <a [class.active]="selectedTab == 'upload'" class="nav-link" data-toggle="tab"

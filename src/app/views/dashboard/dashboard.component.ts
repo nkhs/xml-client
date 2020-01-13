@@ -254,7 +254,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   newAdName = '';
   newAdLink = '';
+  newAdOrder = '0';
+  newAdOrderIsError = false;
+  newAdTagLine = '';
   newAdImageURL = '';
+  newAdPosition = '0'
+  newAdHeight = '0'
+  newAdFullWidth = false;
   newAdEnabled = true;
   newAdType = 'Banner';
   newAdBank = 'Remit2India';
@@ -284,6 +290,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   _addNewAd() {
 
+    if (this.newAdType == 'App Link') {
+      var orderIsValid = true;
+      for (var i = 0; i < this.Data.length; i++) {
+        if (this.Data[i].order == parseInt(this.newAdOrder)) orderIsValid = false;
+      }
+      if (!orderIsValid) {
+        this.newAdOrderIsError = true;
+        return;
+      }
+    }
+
     if (this.newAdType != 'App Link' && this.newAdImageURL.length == 0) {
       this.newAdMessage = 'Please Input image';
       this.isNewUserBusy = false;
@@ -301,6 +318,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ad.link = this.newAdLink;
     ad.scheduleType = this.newAdScheduleType;
     ad.schedule = this.newAdSchedule;
+    ad.order = this.newAdOrder;
+    ad.tagLine = this.newAdTagLine;
+    ad.position = this.newAdPosition;
+    ad.height = this.newAdHeight;
+    ad.fullwidth = this.newAdFullWidth;
     this.adService.addAd(ad).subscribe(res => {
       this.isNewUserBusy = false;
       if (res.success) {
@@ -382,7 +404,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   editAdImageURL = '';
   editAdLink = '';
   editAdMessage = '';
-
+  editAdOrder = '0';
+  editAdOrderIsError = false;
+  editAdPosition = '0';
+  editAdHeight = '0';
+  editAdFullWidth = false;
+  editAdTagLine = '';
   editAdScheduleType = '';
   editAdSchedule = '';
 
@@ -426,7 +453,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
   }
   _editAd() {
-
+    if (this.editAdType == 'App Link') {
+      var orderIsValid = true;
+      for (var i = 0; i < this.Data.length; i++) {
+        if (this.selectedAccountForEdit.order != this.editAdOrder && this.Data[i].order == parseInt(this.editAdOrder)) orderIsValid = false;
+      }
+      if (!orderIsValid) {
+        this.editAdOrderIsError = true;
+        return;
+      }
+    }
     if (this.editAdType != 'App Link' && this.editAdImageURL.length == 0) {
       this.editAdMessage = 'Please Input Image';
       return;
@@ -444,7 +480,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.selectedAccountForEdit.scheduleType = this.editAdScheduleType;
     this.selectedAccountForEdit.schedule = this.editAdSchedule;
-
+    this.selectedAccountForEdit.order = this.editAdOrder;
+    this.selectedAccountForEdit.tagLine = this.editAdTagLine;
+    this.selectedAccountForEdit.position = this.editAdPosition;
+    this.selectedAccountForEdit.height = this.editAdHeight;
+    this.selectedAccountForEdit.fullwidth = this.editAdFullWidth;
     this.adService.updateAccount(this.selectedAccountForEdit).subscribe(res => {
       this.isEditUserBusy = false;
       if (res.success) {

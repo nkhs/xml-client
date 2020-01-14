@@ -12,10 +12,13 @@ export class Ad {
     owner: string;
     order: string;
     tagLine: string;
-    
+
     position: string;
     height: string;
     fullwidth: boolean;
+    tabId: string;
+    frequency: string;
+    duration: string;
     
     constructor() {
 

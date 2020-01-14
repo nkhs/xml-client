@@ -268,9 +268,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   newAdSchedule = '';
 
   newAdImageFile: any
-
+  newAdTabId = '0';
   newAdMessage = '';
   isNewUserBusy = false;
+  newAdFrequency = '1';
+  newAdDuration = '1';
+
   newAdImageObject: any;
   newImageFileChangeEvent(fileInput: any) {
     const self = this;
@@ -323,6 +326,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ad.position = this.newAdPosition;
     ad.height = this.newAdHeight;
     ad.fullwidth = this.newAdFullWidth;
+    ad.tabId = this.newAdTabId;
+    ad.frequency = this.newAdFrequency;
+    ad.duration = this.newAdDuration;
+
     this.adService.addAd(ad).subscribe(res => {
       this.isNewUserBusy = false;
       if (res.success) {
@@ -412,12 +419,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   editAdTagLine = '';
   editAdScheduleType = '';
   editAdSchedule = '';
-
+  editAdTabId = '0';
   editAdEnabled = true;
   isEditUserBusy = false;
   editAdType = '';
   editAdBank = 'Remit2India';
   editAdImageFile: any;
+  editAdFrequency = '1';
+  editAdDuration = '1';
 
   editImageFileChangeEvent(fileInput: any) {
     const self = this;
@@ -485,6 +494,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedAccountForEdit.position = this.editAdPosition;
     this.selectedAccountForEdit.height = this.editAdHeight;
     this.selectedAccountForEdit.fullwidth = this.editAdFullWidth;
+    this.selectedAccountForEdit.tabId = this.editAdTabId;
+    this.selectedAccountForEdit.frequency = this.editAdFrequency;
+    this.selectedAccountForEdit.duration = this.editAdDuration;
+
     this.adService.updateAccount(this.selectedAccountForEdit).subscribe(res => {
       this.isEditUserBusy = false;
       if (res.success) {
@@ -584,5 +597,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else {
       this.editScheduleError = 'Invalid Schedule Format'
     }
+  }
+  onTapXML() {
+    window.open(`${environment.API_URL}/ad/xml/${this.userId}`, '_new');
   }
 }

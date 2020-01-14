@@ -304,7 +304,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.newAdType != 'App Link' && this.newAdImageURL.length == 0) {
+    if ((this.newAdType != 'App Link' && this.newAdType != 'Top Bank' && this.newAdImageURL.length == 0)) {
       this.newAdMessage = 'Please Input image';
       this.isNewUserBusy = false;
       return;
@@ -472,7 +472,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    if (this.editAdType != 'App Link' && this.editAdImageURL.length == 0) {
+    if (this.editAdType != 'App Link' && this.editAdType != 'Top Bank' && this.editAdImageURL.length == 0) {
       this.editAdMessage = 'Please Input Image';
       return;
     }

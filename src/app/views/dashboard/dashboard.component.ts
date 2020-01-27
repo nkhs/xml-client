@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   sortUpActivate = false;
   sortUpName = false;
   userId = '';
+  userName = '';
 
   onTapSortName() {
     this.sortUpName = !this.sortUpName;
@@ -57,6 +58,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.userId = this.sharedService.getUser()._id;
+    this.userName = this.sharedService.getUser().email;
+    
 
     // this.DataForDisplay = this.sharedService.getDataList();
     this.getAdList();
@@ -64,14 +67,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   getImageList() {
     this.imageList = [];
-    this.adService.getImageList(this.userId)
+    this.adService.getImageList(this.userName)
       .subscribe(res => {
         if (res.success) {
           var data = res.data;
           for (var i = 0; i < data.length; i++) {
             if (!environment.production) {
               if (data[i] != null && !data[i].includes('http')) {
-                this.imageList.push(environment.SERVER_URL + '/' + data[i]);
+                this.imageList.push(environment.API_URL + '/' + data[i]);
               }
             }
             else {
@@ -119,7 +122,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     // if (!environment.production) {
     if (data.image != null && !data.image.includes('http')) {
-      data.image = environment.SERVER_URL + '/' + data.image;
+      data.image = environment.API_URL + '/' + data.image;
     }
     // }
     return dataset;
@@ -346,7 +349,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.isNewUserBusy = true;
     this.newAdMessage = 'Uploading Image ...';
-    this.adService.upload(this.newAdImageFile, this.userId)
+    this.adService.upload(this.newAdImageFile, this.userName)
       .then(res => {
         console.log(res);
 
@@ -599,6 +602,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
   onTapXML() {
-    window.open(`${environment.API_URL}/ad/xml/${this.userId}`, '_new');
+    window.open(`${environment.API_URL}/${this.userName}/cads.xml`, '_new');
   }
 }

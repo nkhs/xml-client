@@ -1,6 +1,6 @@
-const server_url = 'localhost'
+// const server_url = 'localhost'
 // const server_url = '52.196.229.187'
-// const server_url = '192.168.1.101'
+const server_url = '35.184.34.167'
 
 const server_host_url = `http://${server_url}`;
 // const server_host_url = `https://${server_url}`;

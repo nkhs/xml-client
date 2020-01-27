@@ -52,7 +52,7 @@ export class AdService {
         }
       };
 
-      xhr.open('POST', `${environment.API_URL}/storage/upload/${userId}`, true);
+      xhr.open('POST', `${environment.API_URL}/upload/${userId}`, true);
 
       const formData = new FormData();
       formData.append('file', file, file.name);
@@ -61,7 +61,7 @@ export class AdService {
   }
 
   getImageList(userId): Observable<any> {
-    return this.apiService.get(`/storage/image-list/${userId}`);
+    return this.apiService.get(`/${userId}/image-list`);
   }
 
 }

@@ -46,7 +46,7 @@
     "ng2-charts": "1.6.0",
     "ngx-bootstrap": "1.9.3",
     "ngx-select-ex": "^3.4.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "object-keys": "^1.0.11",
     "path": "^0.12.7",
     "primeicons": "^1.0.0-beta.9",

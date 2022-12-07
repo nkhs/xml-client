@@ -37,7 +37,7 @@
     "chart.js": "2.7.1",
     "compare-versions": "^3.4.0",
     "core-js": "2.5.1",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "font-awesome": "^4.7.0",
     "http": "0.0.0",
     "intersection-observer": "^0.5.0",
